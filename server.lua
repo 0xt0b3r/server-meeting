@@ -15,7 +15,7 @@ end)
 -- Gets called when a player is fully loaded.
 RegisterNetEvent("svrMeeting:playerConnected")
 AddEventHandler("svrMeeting:playerConnected", function() 
-    if IsPlayerAceAllowed(source, "clark.meeting") then
+    if IsPlayerAceAllowed(source, "lance.meeting") then
         TriggerClientEvent('svrMeeting:noRestrict', source)
     end
 end)
