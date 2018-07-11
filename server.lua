@@ -1,21 +1,37 @@
-RegisterNetEvent("svrMeeting:beginSync")
-AddEventHandler("svrMeeting:beginSync", function(meetingHost, x, y, z, countdown)
-    TriggerClientEvent('chatMessage', -1, "^1[CADOJ]: ^2".. meetingHost .. "^1 is now hosting a server meeting, You will be teleported in ^2".. countdown .. " seconds.")
-    SetTimeout(countdown * 1000, function()
-        TriggerClientEvent("svrMeeting:beginMeeting", -1, x, y, z, meetingHost)
-    end)
+local permitted = {}
+
+-- function for disabling voie chat later.
+local meetingActive = false
+local x, y, z = nil
+
+-- Register the command
+RegisterCommand('meeting', function(source, args, rawCommand)
+	for i=0, #permitted do
+		if source == permitted[i] then
+			if args[1] == "start" then
+				local countdown = args[2]
+				TriggerClientEvent('chatMessage', -1, "^1[SERVER]: A Server Meeting will begin in ".. countdown .." seconds.")
+				SetTimeout(countdown * 1000, function()
+					TriggerClientEvent('svrMeeting:beginMeeting', -1)
+				end)
+			elseif args[1] == "stop" then
+				TriggerClientEvent('svrMeeting:endMeeting', -1)
+			end
+		end
+	end
 end)
 
-RegisterNetEvent("svrMeeting:finalizeMeeting")
-AddEventHandler("svrMeeting:finalizeMeeting", function(meetingHost)
-    TriggerClientEvent('chatMessage', -1, "^1[CADOJ]: ^2".. meetingHost .. "^1 has now ended the server meeting, You may resume roleplay.")
-    TriggerClientEvent('svrMeeting:stopMeeting', -1)
+RegisterNetEvent('svrMeeting:startSyncMeeting')
+AddEventHandler('svrMeeting:startSyncMeeting', function()
+	if IsPlayerAceAllowed(source, 'lance.meeting') then
+		table.insert(permitted, source)
+		TriggerClientEvent('svrMeeting:allowMeeting', source)
+		
+		TriggerClientEvent('chatMessage', source, "^1[SERVER]:^1 You are permitted to begin a server meeting.")
+	end
+	TriggerClientEvent('svrMeeting:allowedMeeting', -1)
 end)
 
--- Gets called when a player is fully loaded.
-RegisterNetEvent("svrMeeting:playerConnected")
-AddEventHandler("svrMeeting:playerConnected", function() 
-    if IsPlayerAceAllowed(source, "lance.meeting") then
-        TriggerClientEvent('svrMeeting:noRestrict', source)
-    end
+RegisterNetEvent('svrMeeting:endSyncMeeting')
+AddEventHandler('svrMeeting:endSyncMeeting', function()
 end)
