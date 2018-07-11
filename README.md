@@ -13,5 +13,4 @@ Add the following lines to the server.cfg file:
 - add_principal identifier.steam:110000114192c42 group.admin -- Adds the user's steam hex to the admin group.
 
 # Notes
-- This was created for CADOJRP by me, Please come join us!
 - I need my D A R N testing group on discord back, any elements that can help would be greatly appreciated.
