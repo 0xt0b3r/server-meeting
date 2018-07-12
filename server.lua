@@ -36,6 +36,9 @@ function isAdmin(source)
                 allowed = true
             end
         end
-    end
+	end
+	if IsPlayerAceAllowed(source, "lance.meeting") then
+		allowed = true
+	end
     return allowed
 end
