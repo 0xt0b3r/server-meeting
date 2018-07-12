@@ -4,13 +4,7 @@ local allowed = false
 local meetingRunning = false
 
 Citizen.CreateThread(function()
-    while true do
-      Citizen.Wait(0)
-      if NetworkIsSessionActive() then
-        TriggerServerEvent('svrMeeting:startSyncMeeting')
-        return
-      end
-    end
+  TriggerServerEvent('svrMeeting:startSyncMeeting')
 end)
 
 RegisterNetEvent('svrMeeting:beginMeeting')
